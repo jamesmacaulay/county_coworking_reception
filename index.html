@@ -5,6 +5,8 @@
   <title>Welcome to County Coworking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/en-ca.js"></script>
 </head>
 
 <body>
@@ -13,9 +15,14 @@
       <div><img src="logo.png" alt="County Coworking logo" style="width: 4rem"></div>
       <h1>Welcome to County Coworking!</h1>
       <img src="emoji-line.png" alt="🎉💼💻👖🗒🖥✏️🎉" style="width: 24rem">
-      <h2>Monday, January 20</h2>
+      <h2 id="date"></h2>
     </div>
   </div>
+
+  <script>
+    var formattedDate = moment().format("dddd, MMMM Do");
+    document.getElementById("date").innerHTML = formattedDate;
+  </script>
 </body>
 
 </html>
