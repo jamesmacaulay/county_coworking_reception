@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta charset="utf-8" />
   <title>Welcome to County Coworking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css" />
@@ -20,8 +21,19 @@
   </div>
 
   <script>
-    var formattedDate = moment().format("dddd, MMMM Do");
-    document.getElementById("date").innerHTML = formattedDate;
+    (function (scope) {
+      function refreshAndReschedule() {
+        var minutePastMidnight = moment().add(1, 'day').startOf('day').add(1, 'minute');
+        var delay = minutePastMidnight.diff(moment());
+        scope.setTimeout(refreshAndReschedule, delay);
+        console.log("[" + moment().toISOString(true) + "]: Scheduled refresh for " + moment().add(delay).calendar());
+
+        var formattedDate = moment().format("dddd, MMMM Do");
+        document.getElementById("date").innerHTML = formattedDate;
+        console.log("[" + moment().toISOString(true) + "]: Updated displayed date to " + formattedDate);
+      };
+      refreshAndReschedule();
+    })(window);
   </script>
 </body>
 
