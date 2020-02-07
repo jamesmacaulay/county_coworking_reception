@@ -13,15 +13,50 @@
 <body>
   <div class="sans-serif vh-100 dt w-100">
     <div class="dtc v-mid tc">
-      <div><img src="logo.png" alt="County Coworking logo" style="width: 4rem"></div>
+      <div><img src="logo.png" alt="County Coworking logo" style="width: 3rem"></div>
       <h1>Welcome to County Coworking!</h1>
       <img src="emoji-line.png" alt="🎉💼💻👖🗒🖥✏️🎉" style="width: 24rem">
       <h2 id="date"></h2>
+      <h1 id="event-title" display="none"></h1>
+      <p id="event-description" display="none"></p>
     </div>
   </div>
 
   <script>
     (function () {
+      var events = {
+        "2020-02-10": {
+          "title": "Annual Fire Inspection Today",
+          "description": "The alarm may go off at various times until 12:30pm. Sorry for the disruption!"
+        }
+      };
+
+      function logWithTimestamp(logString) {
+        console.log("[" + moment().toISOString(true) + "]: " + logString);
+      }
+
+      var formattedDate = moment().format("dddd, MMMM Do");
+      document.getElementById("date").innerHTML = formattedDate;
+      logWithTimestamp("Updated displayed date to " + formattedDate);
+
+      function displayEventInfoFor(yyyy_mm_dd) {
+        var event = events[yyyy_mm_dd];
+        function update(property) {
+          var element = document.getElementById("event-" + property);
+          if (event != null && event[property] != null) {
+            element.style.display = "block";
+            element.innerHTML = event[property];
+            logWithTimestamp("Set event " + property + " to " + JSON.stringify(event[property]));
+          } else {
+            element.innerHTML = "";
+            element.style.display = "none";
+          }
+        }
+        update("title");
+        update("description");
+      }
+      displayEventInfoFor(moment().format("Y-MM-DD"));
+
       function reloadWindow() {
         window.location.reload();
       }
@@ -31,17 +66,14 @@
         return minutePastMidnight.diff(moment());
       }
 
-      function logWithTimestamp(logString) {
-        console.log("[" + moment().toISOString(true) + "]: " + logString);
-      }
-
       var delay = whenTomorrowComes();
       window.setTimeout(reloadWindow, delay);
       logWithTimestamp("Scheduled refresh for " + moment().add(delay).calendar());
 
-      var formattedDate = moment().format("dddd, MMMM Do");
-      document.getElementById("date").innerHTML = formattedDate;
-      logWithTimestamp("Updated displayed date to " + formattedDate);
+      window.WelcomeDesk = {
+        events: events,
+        displayEventInfoFor: displayEventInfoFor,
+      }
     })();
   </script>
 </body>
