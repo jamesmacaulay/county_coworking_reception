@@ -21,19 +21,28 @@
   </div>
 
   <script>
-    (function (scope) {
-      function refreshAndReschedule() {
-        var minutePastMidnight = moment().add(1, 'day').startOf('day').add(1, 'minute');
-        var delay = minutePastMidnight.diff(moment());
-        scope.setTimeout(refreshAndReschedule, delay);
-        console.log("[" + moment().toISOString(true) + "]: Scheduled refresh for " + moment().add(delay).calendar());
+    (function () {
+      function reloadWindow() {
+        window.location.reload();
+      }
 
-        var formattedDate = moment().format("dddd, MMMM Do");
-        document.getElementById("date").innerHTML = formattedDate;
-        console.log("[" + moment().toISOString(true) + "]: Updated displayed date to " + formattedDate);
-      };
-      refreshAndReschedule();
-    })(window);
+      function whenTomorrowComes() {
+        var minutePastMidnight = moment().add(1, 'day').startOf('day').add(1, 'minute');
+        return minutePastMidnight.diff(moment());
+      }
+
+      function logWithTimestamp(logString) {
+        console.log("[" + moment().toISOString(true) + "]: " + logString);
+      }
+
+      var delay = whenTomorrowComes();
+      window.setTimeout(reloadWindow, delay);
+      logWithTimestamp("Scheduled refresh for " + moment().add(delay).calendar());
+
+      var formattedDate = moment().format("dddd, MMMM Do");
+      document.getElementById("date").innerHTML = formattedDate;
+      logWithTimestamp("Updated displayed date to " + formattedDate);
+    })();
   </script>
 </body>
 
